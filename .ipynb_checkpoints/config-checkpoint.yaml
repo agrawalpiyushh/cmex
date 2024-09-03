@@ -1,0 +1,18 @@
+# Model
+seed: 42  # Seed for reproducibility
+# n_input: 20 # 40 # 20 # 41  # Number of input features (changes according to train/data_loader.py
+# n_output: 9  # Number of output features
+n_hidden_layers: 8 # 8
+n_hidden_neurons: 256 # 256
+max_epochs: 200 # 200 # Maximum number of epochs
+lr: 1.e-4 # learning rate
+
+# Training logging
+wandb:
+  entity: 'agrawalp'  # Name of wandb entity
+  project: 'PCAPRO'  # Name of wandb project
+  group: 'Development'  # Name of wandb group
+  job_type: 'Training'  # Nme of wandb job_type
+  tags: ['development'] # Run tags
+  _service_wait: '300'
+  notes: "Mapping function."
