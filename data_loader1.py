@@ -13,17 +13,15 @@ class PCADataModule(pl.LightningDataModule):
     def __init__(self, data_fnm, seed, 
                  
                  key_add_noise_to_Idata=0,
-                 noise_level=0.,
+                 noise_level=1e-3,
                  
                  nb_train=.6, nb_val=.2, nb_test=.2,
-                 batch_size=1024, num_workers=8, **kwargs):
-        """ Loads paired data samples of AIA EUV images and EVE irradiance measures.
+                 batch_size=1024, num_workers=8, **kwargs, 
 
-        Input data needs to be paired.
-        Parameters
-        ----------
-        stacks_csv_path: path to the matches
-        eve_npy_path: path to the EVE data file
+                 DBsize_in_M=None, # added on Sep 9 2024
+                 ):
+        """ 
+
         """
         super().__init__()
         self.num_workers = num_workers if num_workers is not None else os.cpu_count() // 2
@@ -38,6 +36,8 @@ class PCADataModule(pl.LightningDataModule):
         self.key_add_noise_to_Idata=key_add_noise_to_Idata
         self.noise_level=noise_level       
         self.seed = seed
+
+        self.DBsize_in_M = DBsize_in_M
 
     # ------------------------------------------------------------------------
     def compute_IOdata_stats(self, input_data, output_data):
@@ -78,6 +78,7 @@ class PCADataModule(pl.LightningDataModule):
         # load data
         with open(self.data_fnm, "rb") as f:
             tdict = pickle.load(f)
+
         input_data  = tdict['input_data']
         output_data = tdict['output_data']
 
@@ -102,9 +103,29 @@ class PCADataModule(pl.LightningDataModule):
                                           self.io_stats['mean_Odata'], \
                                           self.io_stats['std_Odata'])
 
+        # -------------
         # extract 1st 10k models for evaluation dataset --------
-        input_data  =  input_data[10000:,:] 
-        output_data = output_data[10000:,:] 
+        if '10k' in self.data_fnm:
+            nn1 = 10000 # number of evaluation models.  
+        else:
+            raise NameError(f'PAerr: text "1st 10k models" should be there in {self.data_fnm}.')
+
+        if nn1 > input_data.shape[0]:
+            raise NameError(f'PAerr: No. of DBase models ({nput_data.shape[0]}) is < number of models to be used for evaluation ({nn1}).')
+        
+        if self.DBsize_in_M is None: 
+            self.DBsize_in_M = int(input_data.shape[0]/1e6)
+
+            input_data  =  input_data[nn1:,:] 
+            output_data = output_data[nn1:,:] 
+        else:
+            DBsize = self.DBsize_in_M*1e6
+            if DBsize > input_data.shape[0]:
+                raise NameError('PAerr: DBsize > No. of available models. This is not allowed.')
+
+            # retain 1st 10k models for final evaluation, once training is done.
+            input_data  =  input_data[nn1:nn1+DBsize,:] 
+            output_data = output_data[nn1:nn1+DBsize,:] 
 
         # --------------------------------------------------
         generator1 = torch.Generator().manual_seed(self.seed)

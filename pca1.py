@@ -18,137 +18,123 @@ torch.set_default_dtype(torch.float64)
 
 
 if __name__ == '__main__':
-    # input
+    # IOdata file 
+
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_Idata=coeffs_nl=1e-03_Dsize=1M_pH=1_absB=1_hcosTh=1.pickle'
+    IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_pH=1_Btan=1_hsinTh=1.pickle'
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hcosTh=1.pickle'
-    IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
-    # blin models
+    # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
+
+    # Blin models
     # IOdata_fnm0 = 'Jul26_pcaDB_LHS_2M_Blin_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_habscosTh=1.pickle'
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=4M_pH=1_Btan=1_habscosTh=1.pickle'
     # IOdata_fnm0 = 'Jul26_pcaDB_LHS_2M_Blin_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
     # Monte carlo with profile filtering if chisqr too small
     # IOdata_fnm0 = 'MgIIhk_PCAdbase_nPSF_may17_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
-
     print(f'\n IOdata_fnm0={IOdata_fnm0} \n')
-    # ------------------------------------------
-    
-    # key_add_noise_to_Idata =0 # Add noise to IData during training/validation
-    # noise_level = 1e-3 # noise level -as per work: "Jul3_howmuch_indiv_coeffs_change_for_a_given_noiselevel.ipynb"
+    # -----------------------------------------
+    # common folders
 
-    # if not 'nl=0' in IOdata_fnm0:
-    #     if key_add_noise_to_Idata ==1:
-    #         raise NameError('Shouldnt have noise in coeffs and also add additional noise during traning. Fix this.')
-
-    # ------------------------------------------
     # parent_dir = '/glade/u/home/piyushag/cmex_ml0'
-    # IOdata_fold = f'{parent_dir}/NN_IOdata_ckpts_Jul11onwards/NN_IOdata'    
+    # IOdata_fold = f'{parent_dir}/NN_IOdata_ckpts_Jul11onwards/NN_IOdata'  
     parent_dir = '/glade/work/piyushag/cmex_ml0'
-    IOdata_fold = f'{parent_dir}/NN_IOdata_ckpts_Jul26onwards/NN_IOdata'      
-    config_fnm = f"./config.yaml"
-    
-    
-    # ---------------------
+    NN_IOdir0  = 'NN_IOdata_ckpts_Jul26onwards'
+    # ------------------------------------------
+    IOdata_fold = f'{parent_dir}/{NN_IOdir0}/NN_IOdata'
+    config_fnm = f'{parent_dir}/codes/config.yaml'
+
     IOdata_fnm = f"{IOdata_fold}/{IOdata_fnm0}"
+    IOdata_fnm00 = IOdata_fnm0.split('.pickle')[0]
     
-    checkpoint_fnm0 = IOdata_fnm0.split('.pickle')[0]
-    # if key_add_noise_to_Idata ==1:
-    #     checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC={noise_level:.0e}'
-    # else:
-    #     checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC=0'
-    #     noise_level=0.
-    
-    checkpoint_dir = f'{os.path.dirname(IOdata_fold)}/tckpts'
-    os.makedirs(checkpoint_dir, exist_ok=True)
+    for tDBsize_in_M in [1., ]:
 
-    with open(config_fnm, 'r') as stream:
-        config_data = yaml.load(stream, Loader=yaml.SafeLoader)
-    
-    # Seed: For reproducibility
-    seed = config_data['seed']
-    torch.manual_seed(seed)
-    np.random.seed(seed)
+        # ---------------------
+        with open(config_fnm, 'r') as stream:
+            config_data = yaml.load(stream, Loader=yaml.SafeLoader)
+        maxEpoch = config_data['max_epochs']
 
-    maxEpoch = config_data['max_epochs']
-    # checkpoint_fnm0 = f'{checkpoint_fnm0}'
+        ckpt_fold = f'{parent_dir}/{NN_IOdir0}/ckpts_fold/{IOdata_fnm00}_mEpch={maxEpoch}_DBsize={tDBsize_in_M:.1f}M' # to store checkpoints during training
+        void = os.makedirs(ckpt_fold)
+        
+        # ---------------------
+        # Seed: For reproducibility
+        seed = config_data['seed']
+        torch.manual_seed(seed)
+        np.random.seed(seed)
 
-    # nmodel_range=(10000, 250000) # start, end index of model to train over
-    print(checkpoint_fnm0.split('nPSF_'))
-    tstr1 = checkpoint_fnm0.split('nPSF_')[1]
-    wandb_name = f'PCA_|costheta| - {tstr1}'
-    wandb_name = IOdata_fnm0
-    # ------------------------------------------
-    # Initialize data loader
-    data_loader = PCADataModule(data_fnm=IOdata_fnm, 
-                                seed=seed, num_workers=os.cpu_count() // 2,
-                                key_add_noise_to_Idata=0,
-                                noise_level=0, 
-                               )
-    # Generate training/validation/test sets
-    data_loader.setup()
-    
-    # ------------------------------------------
-    # stats for input and output parameters - mean, std
-    # io_stats = data_loader.io_stats
+        # ------------------------------------------
+        # Initialize data loader
+        data_loader = PCADataModule(data_fnm=IOdata_fnm, 
+                                    seed=seed, num_workers=os.cpu_count() // 2,
+                                    key_add_noise_to_Idata=0, noise_level=0, 
+                                    DBsize_in_M=tDBsize_in_M)
+        data_loader.setup() # Generate training/validation/test sets
+        
+        # ------------------------------------------
+        # stats for input and output parameters - mean, std
+        # io_stats = data_loader.io_stats
 
-    # Initialize model  # TODO: Modify
-    model = PCAModel(
-                     # n_input=config_data['n_input'], # number of inputs
-                     # n_output=config_data['n_output'], # number of outputs
-                     n_input  = data_loader.io_stats['mean_Idata'].size, # input data nvars
-                     n_output = data_loader.io_stats['mean_Odata'].size, # output data nvars
-                     
-                     io_stats = data_loader.io_stats, # mean/std of IO data
-                     key_add_noise_to_Idata=0,
-                     noise_level=0,
+        # Initialize model  # TODO: Modify
+        model = PCAModel(
+                         # n_input=config_data['n_input'], # number of inputs
+                         # n_output=config_data['n_output'], # number of outputs
+                         n_input  = data_loader.io_stats['mean_Idata'].size, # input data nvars
+                         n_output = data_loader.io_stats['mean_Odata'].size, # output data nvars
+                         
+                         io_stats = data_loader.io_stats, # mean/std of IO data
+                         key_add_noise_to_Idata=0,
+                         noise_level=0,
 
-                     n_hidden_layers  = config_data['n_hidden_layers'],
-                     n_hidden_neurons = config_data['n_hidden_neurons'],
-                     lr = config_data['lr'])
+                         n_hidden_layers  = config_data['n_hidden_layers'],
+                         n_hidden_neurons = config_data['n_hidden_neurons'],
+                         lr = config_data['lr'])
 
-    # Initialize logger
-    wandb_logger = WandbLogger(entity=config_data['wandb']['entity'],
-                               project=config_data['wandb']['project'],
-                               group=config_data['wandb']['group'],
-                               job_type=config_data['wandb']['job_type'],
-                               tags=config_data['wandb']['tags'],
-                               name=wandb_name,
-                               notes=config_data['wandb']['notes'],
-                               config=config_data)
+        # Initialize logger
+        wandb_logger = WandbLogger(entity=config_data['wandb']['entity'],
+                                   project=config_data['wandb']['project'],
+                                   group=config_data['wandb']['group'],
+                                   job_type=config_data['wandb']['job_type'],
+                                   tags=config_data['wandb']['tags'],
+                                   name=IOdata_fnm00,
+                                   notes=config_data['wandb']['notes'],
+                                   config=config_data)
 
-    # Checkpoint callback
-    checkpoint_callback = ModelCheckpoint(dirpath=checkpoint_dir,
-                              monitor='valid_loss', mode='min', save_top_k=1,
-                              # filename=f'{checkpoint_fnm0}_ep={epoch:02d}_vl={valid_loss:.2f}', 
-                              filename='Epoch={epoch:02d}-vl={valid_loss:.2f}_1M', 
-                              # filename=checkpoint_fnm0, 
-                              save_last=True, # to help Resume from last ckpt file. 
-                             )
+        # Checkpoint callback
+        checkpoint_callback = ModelCheckpoint(dirpath=ckpt_fold, # checkpoint_dir,
+                                  monitor='valid_loss', mode='min', 
+                                  filename=f'best_Epch={epoch:03d}', # {valid_loss:.2f}
+                                  save_top_k=1,   # saves the top model that leads to best validation loss
+                                  save_last=True, # saves the current state of the training, to help Resume from last saved ckpt file. 
+                                 )
 
-    # Initialize trainer
-    trainer = Trainer(default_root_dir=checkpoint_dir,
-                      accelerator="gpu",
-                      devices=1 if torch.cuda.is_available() else None,
-                      max_epochs=maxEpoch, # config_data['max_epochs'],
-                      callbacks=[checkpoint_callback],
-                      logger=wandb_logger,
-                      log_every_n_steps=10
-                      )
+        # Initialize trainer
+        trainer = Trainer(default_root_dir=ckpt_fold, # checkpoint_dir,
+                          accelerator="gpu",
+                          devices=1 if torch.cuda.is_available() else None,
+                          max_epochs=maxEpoch,
+                          callbacks=[checkpoint_callback],
+                          logger=wandb_logger,
+                          log_every_n_steps=10, 
+                          )
 
-    # Train the model ⚡
-    trainer.fit(model, data_loader, ckpt_path='last')
+        # Train the model ⚡
+        trainer.fit(model, data_loader, ckpt_path='last')
 
-    # Save
-    save_dictionary = config_data
-    save_dictionary['model'] = model
-    full_checkpoint_path = f"{os.path.dirname(IOdata_fold)}/{checkpoint_fnm0}.ckpt"
-    torch.save(save_dictionary, full_checkpoint_path)
+        # Save model and 
+        save_dictionary = config_data
+        save_dictionary['model'] = model
 
-    # Evaluate on test set
-    # Load model from checkpoint
-    state = torch.load(full_checkpoint_path)
-    model = state['model']
-    trainer.test(model, data_loader)
+        finalcheckpoint_path = f"{os.path.dirname(IOdata_fold)}/{os.path.basename(ckpt_fold)}.ckpt"
+        # finalcheckpoint_path = f"{os.path.dirname(IOdata_fold)}/{checkpoint_fnm0}_mEpch={maxEpoch}_DBsz={tDBsize_in_M}M.ckpt"
+        # finalcheckpoint_path = f"{os.path.dirname(IOdata_fold)}/{checkpoint_fnm0}_mE={maxEpoch}.ckpt"
+        torch.save(save_dictionary, finalcheckpoint_path)
 
-    # Finalize logging
-    wandb.finish()
+        # Evaluate on test set
+        # Load model from checkpoint
+        state = torch.load(finalcheckpoint_path)
+        model = state['model']
+        trainer.test(model, data_loader)
+
+        # Finalize logging
+        wandb.finish()
