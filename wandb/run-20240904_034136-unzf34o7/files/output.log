@@ -1,0 +1,123 @@
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A100-SXM4-40GB') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:613: UserWarning: Checkpoint directory /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts exists and is not empty.
+  rank_zero_warn(f"Checkpoint directory {dirpath} exists and is not empty.")
+Restoring states from the checkpoint path at /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts/last.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-7fe1c95b-862b-53ca-922d-611a03867a8d]
+  | Name      | Type      | Params
+----------------------------------------
+0 | model     | MLP       | 73.2 K
+1 | loss_func | HuberLoss | 0
+----------------------------------------
+73.2 K    Trainable params
+0         Non-trainable params
+73.2 K    Total params
+0.293     Total estimated model params size (MB)
+Restored all states from the checkpoint file at /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts/last.ckpt
+/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 64 worker processes in total. Our suggested max number of worker in current system is 10, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+
+
+
+
+Epoch 2:  75%|▋| 581/775 [00:08<00:02, 66.71it/s, loss=0.145, v_num=34o7, train_loss_step=0.171, tra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 3:  75%|▋| 581/775 [00:09<00:03, 61.40it/s, loss=0.143, v_num=34o7, train_loss_step=0.169, tra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 4:  75%|▋| 581/775 [00:10<00:03, 57.89it/s, loss=0.142, v_num=34o7, train_loss_step=0.166, tra
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation DataLoader 0:  54%|███████████████████▍                | 105/194 [00:25<00:21,  4.20it/s]
+/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/pytorch_lightning/trainer/call.py:48: UserWarning: Detected KeyboardInterrupt, attempting graceful shutdown...
+
+Validation DataLoader 0:  55%|███████████████████▊                | 107/194 [00:25<00:20,  4.20it/s]
+Traceback (most recent call last):
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/glade/work/piyushag/cmex_ml0/codes/pca1.py", line 145, in <module>
+    torch.save(save_dictionary, full_checkpoint_path)
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/serialization.py", line 629, in save
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol, _disable_byteorder_record)
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/serialization.py", line 841, in _save
+    pickler.dump(obj)
+AttributeError: Can't pickle local object 'EvaluationLoop.advance.<locals>.batch_to_device'
+Traceback (most recent call last):
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/glade/work/piyushag/cmex_ml0/codes/pca1.py", line 145, in <module>
+    torch.save(save_dictionary, full_checkpoint_path)
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/serialization.py", line 629, in save
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol, _disable_byteorder_record)
+  File "/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/serialization.py", line 841, in _save
+    pickler.dump(obj)
+AttributeError: Can't pickle local object 'EvaluationLoop.advance.<locals>.batch_to_device'

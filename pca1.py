@@ -8,8 +8,10 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from codes.data_loader1 import PCADataModule
-from codes.model1 import PCAModel
+from data_loader1 import PCADataModule
+from model1 import PCAModel
+# from codes.data_loader1 import PCADataModule
+# from codes.model1 import PCAModel
 # from train.model import PCAModel
 # from train.data_loader import PCADataModule
 torch.set_default_dtype(torch.float64)
@@ -19,11 +21,11 @@ if __name__ == '__main__':
     # input
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_Idata=coeffs_nl=1e-03_Dsize=1M_pH=1_absB=1_hcosTh=1.pickle'
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hcosTh=1.pickle'
-    # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
+    IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
     # blin models
     # IOdata_fnm0 = 'Jul26_pcaDB_LHS_2M_Blin_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
     # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_habscosTh=1.pickle'
-    IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=4M_pH=1_Btan=1_habscosTh=1.pickle'
+    # IOdata_fnm0 = 'Jul5_pcaDB_LHS_5M_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=4M_pH=1_Btan=1_habscosTh=1.pickle'
     # IOdata_fnm0 = 'Jul26_pcaDB_LHS_2M_Blin_1st10k_MgIIhk_Obs_nPSF_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
     # Monte carlo with profile filtering if chisqr too small
     # IOdata_fnm0 = 'MgIIhk_PCAdbase_nPSF_may17_1st10k_MgIIhk_Obs_nPSF_nC=9532_nl=1e-03_Dsize=1M_pH=1_Btan=1_hsinTh=1.pickle'
@@ -31,31 +33,30 @@ if __name__ == '__main__':
     print(f'\n IOdata_fnm0={IOdata_fnm0} \n')
     # ------------------------------------------
     
-    key_add_noise_to_Idata =0 # Add noise to IData during training/validation
-    noise_level = 1e-3 # noise level -as per work: "Jul3_howmuch_indiv_coeffs_change_for_a_given_noiselevel.ipynb"
+    # key_add_noise_to_Idata =0 # Add noise to IData during training/validation
+    # noise_level = 1e-3 # noise level -as per work: "Jul3_howmuch_indiv_coeffs_change_for_a_given_noiselevel.ipynb"
 
-    if not 'nl=0' in IOdata_fnm0:
-        if key_add_noise_to_Idata ==1:
-            raise NameError('Shouldnt have noise in coeffs and also add additional noise during traning. Fix this.')
+    # if not 'nl=0' in IOdata_fnm0:
+    #     if key_add_noise_to_Idata ==1:
+    #         raise NameError('Shouldnt have noise in coeffs and also add additional noise during traning. Fix this.')
 
-    
     # ------------------------------------------
     # parent_dir = '/glade/u/home/piyushag/cmex_ml0'
     # IOdata_fold = f'{parent_dir}/NN_IOdata_ckpts_Jul11onwards/NN_IOdata'    
     parent_dir = '/glade/work/piyushag/cmex_ml0'
     IOdata_fold = f'{parent_dir}/NN_IOdata_ckpts_Jul26onwards/NN_IOdata'      
-    config_fnm = f"{parent_dir}/config.yaml"
+    config_fnm = f"./config.yaml"
     
     
     # ---------------------
     IOdata_fnm = f"{IOdata_fold}/{IOdata_fnm0}"
     
     checkpoint_fnm0 = IOdata_fnm0.split('.pickle')[0]
-    if key_add_noise_to_Idata ==1:
-        checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC={noise_level:.0e}'
-    else:
-        checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC=0'
-        noise_level=0.
+    # if key_add_noise_to_Idata ==1:
+    #     checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC={noise_level:.0e}'
+    # else:
+    #     checkpoint_fnm0 = f'{checkpoint_fnm0}_nlC=0'
+    #     noise_level=0.
     
     checkpoint_dir = f'{os.path.dirname(IOdata_fold)}/tckpts'
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -69,7 +70,7 @@ if __name__ == '__main__':
     np.random.seed(seed)
 
     maxEpoch = config_data['max_epochs']
-    checkpoint_fnm0 = f'{checkpoint_fnm0}_maxEpoch={maxEpoch}'
+    # checkpoint_fnm0 = f'{checkpoint_fnm0}'
 
     # nmodel_range=(10000, 250000) # start, end index of model to train over
     print(checkpoint_fnm0.split('nPSF_'))
@@ -81,7 +82,8 @@ if __name__ == '__main__':
     data_loader = PCADataModule(data_fnm=IOdata_fnm, 
                                 seed=seed, num_workers=os.cpu_count() // 2,
                                 key_add_noise_to_Idata=0,
-                                noise_level=noise_level)
+                                noise_level=0, 
+                               )
     # Generate training/validation/test sets
     data_loader.setup()
     
@@ -97,8 +99,8 @@ if __name__ == '__main__':
                      n_output = data_loader.io_stats['mean_Odata'].size, # output data nvars
                      
                      io_stats = data_loader.io_stats, # mean/std of IO data
-                     key_add_noise_to_Idata=key_add_noise_to_Idata,
-                     noise_level=noise_level,
+                     key_add_noise_to_Idata=0,
+                     noise_level=0,
 
                      n_hidden_layers  = config_data['n_hidden_layers'],
                      n_hidden_neurons = config_data['n_hidden_neurons'],
@@ -116,21 +118,25 @@ if __name__ == '__main__':
 
     # Checkpoint callback
     checkpoint_callback = ModelCheckpoint(dirpath=checkpoint_dir,
-                                          monitor='valid_loss', mode='min', save_top_k=1,
-                                          filename=checkpoint_fnm0)
+                              monitor='valid_loss', mode='min', save_top_k=1,
+                              # filename=f'{checkpoint_fnm0}_ep={epoch:02d}_vl={valid_loss:.2f}', 
+                              filename='Epoch={epoch:02d}-vl={valid_loss:.2f}_1M', 
+                              # filename=checkpoint_fnm0, 
+                              save_last=True, # to help Resume from last ckpt file. 
+                             )
 
     # Initialize trainer
     trainer = Trainer(default_root_dir=checkpoint_dir,
                       accelerator="gpu",
                       devices=1 if torch.cuda.is_available() else None,
-                      max_epochs=config_data['max_epochs'],
+                      max_epochs=maxEpoch, # config_data['max_epochs'],
                       callbacks=[checkpoint_callback],
                       logger=wandb_logger,
                       log_every_n_steps=10
                       )
 
     # Train the model ⚡
-    trainer.fit(model, data_loader)
+    trainer.fit(model, data_loader, ckpt_path='last')
 
     # Save
     save_dictionary = config_data

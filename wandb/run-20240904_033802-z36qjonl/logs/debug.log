@@ -1,0 +1,29 @@
+2024-09-04 03:38:02,536 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Current SDK version is 0.16.3
+2024-09-04 03:38:02,536 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Configure stats pid to 80492
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Loading settings from /glade/u/home/piyushag/.config/wandb/settings
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Loading settings from /glade/work/piyushag/cmex_ml0/codes/wandb/settings
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-09-04 03:38:02,537 WARNING MainThread:80492 [wandb_setup.py:_flush():76] Could not find program at -m pca1
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m pca1'}
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:_log_setup():526] Logging user logs to ./wandb/run-20240904_033802-z36qjonl/logs/debug.log
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:_log_setup():527] Logging internal logs to ./wandb/run-20240904_033802-z36qjonl/logs/debug-internal.log
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:init():566] calling init triggers
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'seed': 42, 'n_hidden_layers': 8, 'n_hidden_neurons': 256, 'max_epochs': 5, 'lr': 0.0001, 'wandb': {'entity': 'agrawalp', 'project': 'PCAPRO', 'group': 'Development', 'job_type': 'Training', 'tags': ['development'], '_service_wait': '300', 'notes': 'Mapping function.'}}
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:init():616] starting backend
+2024-09-04 03:38:02,537 INFO    MainThread:80492 [wandb_init.py:init():620] setting up manager
+2024-09-04 03:38:02,540 INFO    MainThread:80492 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-09-04 03:38:02,541 INFO    MainThread:80492 [wandb_init.py:init():628] backend started and connected
+2024-09-04 03:38:02,550 INFO    MainThread:80492 [wandb_init.py:init():720] updated telemetry
+2024-09-04 03:38:02,588 INFO    MainThread:80492 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-09-04 03:38:02,878 INFO    MainThread:80492 [wandb_run.py:_on_init():2262] communicating current version
+2024-09-04 03:38:02,915 INFO    MainThread:80492 [wandb_run.py:_on_init():2271] got version response upgrade_message: "wandb version 0.17.8 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-09-04 03:38:02,915 INFO    MainThread:80492 [wandb_init.py:init():804] starting run threads in backend
+2024-09-04 03:38:07,873 INFO    MainThread:80492 [wandb_run.py:_console_start():2241] atexit reg
+2024-09-04 03:38:07,873 INFO    MainThread:80492 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-09-04 03:38:07,873 INFO    MainThread:80492 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-09-04 03:38:07,873 INFO    MainThread:80492 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-09-04 03:38:07,874 INFO    MainThread:80492 [wandb_init.py:init():847] run started, returning control to user process
+2024-09-04 03:40:41,650 WARNING MsgRouterThr:80492 [router.py:message_loop():77] message_loop has been closed

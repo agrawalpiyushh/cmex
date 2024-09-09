@@ -13,7 +13,7 @@ class PCADataModule(pl.LightningDataModule):
     def __init__(self, data_fnm, seed, 
                  
                  key_add_noise_to_Idata=0,
-                 noise_level=1e-3,
+                 noise_level=0.,
                  
                  nb_train=.6, nb_val=.2, nb_test=.2,
                  batch_size=1024, num_workers=8, **kwargs):

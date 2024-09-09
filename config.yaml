@@ -5,7 +5,7 @@ seed: 42  # Seed for reproducibility
 # n_output: 9  # Number of output features
 n_hidden_layers: 8 # 8
 n_hidden_neurons: 256 # 256
-max_epochs: 200 # 200 # Maximum number of epochs
+max_epochs: 5 # 200 # Maximum number of epochs
 lr: 1.e-4 # learning rate
 
 # Training logging

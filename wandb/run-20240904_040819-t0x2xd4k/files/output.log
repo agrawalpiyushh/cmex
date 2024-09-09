@@ -1,0 +1,97 @@
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A100-SXM4-40GB') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:613: UserWarning: Checkpoint directory /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts exists and is not empty.
+  rank_zero_warn(f"Checkpoint directory {dirpath} exists and is not empty.")
+Restoring states from the checkpoint path at /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts/last.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-7fe1c95b-862b-53ca-922d-611a03867a8d]
+  | Name      | Type      | Params
+----------------------------------------
+0 | model     | MLP       | 73.2 K
+1 | loss_func | HuberLoss | 0
+----------------------------------------
+73.2 K    Trainable params
+0         Non-trainable params
+73.2 K    Total params
+0.293     Total estimated model params size (MB)
+Restored all states from the checkpoint file at /glade/work/piyushag/cmex_ml0/NN_IOdata_ckpts_Jul26onwards/tckpts/last.ckpt
+/glade/u/home/piyushag/.conda/envs/pa2/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 64 worker processes in total. Our suggested max number of worker in current system is 10, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+
+
+Epoch 4:  75%|▋| 581/775 [00:08<00:02, 72.25it/s, loss=0.142, v_num=xd4k, train_loss_step=0.166, tra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation DataLoader 0:  98%|███████████████████████████████████▍| 191/194 [00:43<00:00,  4.34it/s]
+
+`Trainer.fit` stopped: `max_epochs=5` reached.
+Testing: 0it [00:00, ?it/s]
+You are using a CUDA device ('NVIDIA A100-SXM4-40GB') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Testing DataLoader 0: 100%|███████████████████████████████████████| 194/194 [00:39<00:00,  4.90it/s]
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃[1m        Test metric        [22m┃[1m       DataLoader 0        [22m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│[36m      valid_CorrCoeff      [39m│[35m    0.9999999307690087     [39m│
+│[36m         valid_MAE         [39m│[35m    489.64405176373185     [39m│
+│[36m        valid_MAE_0        [39m│[35m    3899.7788649297368     [39m│
+│[36m        valid_MAE_1        [39m│[35m   0.017319731203730315    [39m│
+│[36m        valid_MAE_2        [39m│[35m    0.13137777103100276    [39m│
+│[36m        valid_MAE_3        [39m│[35m    0.07816364826370614    [39m│
+│[36m        valid_MAE_4        [39m│[35m   0.017512191893834628    [39m│
+│[36m        valid_MAE_5        [39m│[35m   0.015087774113035052    [39m│
+│[36m        valid_MAE_6        [39m│[35m     6.308199453904799     [39m│
+│[36m        valid_MAE_7        [39m│[35m    10.805888609711777     [39m│
+│[36m         valid_RAE         [39m│[35m    304.76278238246533     [39m│
+│[36m        valid_RAE_0        [39m│[35m     5.826560439926173     [39m│
+│[36m        valid_RAE_1        [39m│[35m     46.50432496906046     [39m│
+│[36m        valid_RAE_2        [39m│[35m    4.3706563708383745     [39m│
+│[36m        valid_RAE_3        [39m│[35m    19.223322785478153     [39m│
+│[36m        valid_RAE_4        [39m│[35m    27.965591582515238     [39m│
+│[36m        valid_RAE_5        [39m│[35m    1.5531479793410659     [39m│
+│[36m        valid_RAE_6        [39m│[35m     720.4453177051607     [39m│
+│[36m        valid_RAE_7        [39m│[35m    1612.2133372274022     [39m│
+│[36m        valid_loss         [39m│[35m    0.14073516604436934    [39m│
+└───────────────────────────┴───────────────────────────┘
